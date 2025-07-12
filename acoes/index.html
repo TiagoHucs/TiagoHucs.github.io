@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jogo das Ações</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      max-width: 500px;
+      width: 90%;
+      margin-top: 50px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 10px 5px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+    }
+
+    #startBtn {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .btn-success {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .btn-danger {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .card {
+      border-radius: 8px;
+      padding: 20px;
+      color: white;
+      margin-bottom: 20px;
+    }
+
+    #timer {
+      font-size: 20px;
+      color: #dc3545;
+      margin-bottom: 20px;
+    }
+
+    #resultado {
+      background-color: #e0f0ff;
+      color: #333;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 30px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 500px) {
+      button {
+        width: 100%;
+        margin: 10px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h3>Jogo das Ações</h3>
+    <hr>
+
+    <div id="instrucoes">
+        Compre ações verdes que estao em alta ou vermelhas que estão em baixa.
+        Venda as demais ações
+    </div>
+
+    <!-- <button id="startBtn">Iniciar</button> -->
+
+
+    <div id="timer" class="hidden">Tempo: 15s</div>
+
+    <div id="acaoContainer" class="hidden">
+      <div id="acaoCard" class="card">
+        <h3 id="acaoValor"></h3>
+        <p id="acaoDirecao"></p>
+      </div>
+    </div>
+
+    <div id="botoesContainer" class="hidden">
+      <button class="btn-success" onclick="comprar()">Comprar</button>
+      <button class="btn-danger" onclick="vender()">Vender</button>
+    </div>
+
+    <div id="resultado" class="hidden"></div>
+    <button id="startBtn">Iniciar</button>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
