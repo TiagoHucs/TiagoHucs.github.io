@@ -10,7 +10,7 @@
   <h1>🧠 Cerebro</h1>
   <hr>
   <div id="item-list"></div>
-  <button id="btn-add-item" onclick="showForm()">Adicionar item</button>
+  <div class="btn" id="btn-show-form" onclick="showForm()">Adicionar item</div>
   <div id="item-form" class="hidden">
     <label for="titulo">Titulo:</label>
     <input type="text" id="titulo-form" name="titulo" required>
@@ -18,7 +18,7 @@
     <label for="descricao">Descrição:</label>
     <input type="text" id="descricao-form" name="descricao" required>
 
-    <button onclick="saveItem()">Enviar</button>
+    <div class="btn" onclick="saveItem()">Enviar</div>
   </div>
   <script src="script.js"></script>
 </body>

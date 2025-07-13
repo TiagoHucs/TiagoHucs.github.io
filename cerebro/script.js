@@ -14,6 +14,7 @@ let itens = [
 ];
 
 const itemList = document.getElementById('item-list');
+const btnShowForm = document.getElementById("btn-show-form");
 const itemForm = document.getElementById("item-form");
 const tituloForm = document.getElementById('titulo-form');
 const descricaoForm = document.getElementById('descricao-form');
@@ -22,7 +23,9 @@ renderList();
 
 function showForm() {
   itemList.classList.add("hidden");
+  btnShowForm.classList.add("hidden");
   itemForm.classList.remove("hidden");
+  
 }
 
 function saveItem() {
@@ -43,6 +46,7 @@ function saveItem() {
   descricaoForm.value = null;
 
   itemForm.classList.add("hidden");
+  btnShowForm.classList.remove("hidden");
 }
 
 function renderList() {

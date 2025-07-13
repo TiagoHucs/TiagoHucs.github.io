@@ -25,13 +25,23 @@ ul#item-list li {
 }
 
 .item{
-  background-color: gray;
+  border: #333;
+  border-width: 2px;
+  border-style: solid;
   padding: 5px;
   margin: 5px;
   border-radius: 5px;
-  
+
 }
 
+.btn{
+  background-color: blue;
+  color: white;
+  padding: 5px;
+  margin: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}
 
 .hidden {
   display: none;
