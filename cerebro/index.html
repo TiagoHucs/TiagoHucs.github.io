@@ -1,25 +1,30 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Lista de Itens</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
   <h1>🧠 Cerebro</h1>
+  <div id="actual-item'"></div>
   <hr>
   <div id="item-list"></div>
   <div class="btn" id="btn-show-form" onclick="showForm()">Adicionar item</div>
   <div id="item-form" class="hidden">
-    <label for="titulo">Titulo:</label>
-    <input type="text" id="titulo-form" name="titulo" required>
+    <div class="form">
+      <label for="titulo">Titulo:</label><br>
+      <input type="text" id="titulo-form" name="titulo" required><br>
+      <label for="descricao">Descrição:</label><br>
+      <input type="text" id="descricao-form" name="descricao" required><br>
+          <div class="btn" onclick="saveItem()">Enviar</div>
+    </div>
 
-    <label for="descricao">Descrição:</label>
-    <input type="text" id="descricao-form" name="descricao" required>
-
-    <div class="btn" onclick="saveItem()">Enviar</div>
   </div>
   <script src="script.js"></script>
 </body>
+
 </html>

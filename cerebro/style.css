@@ -5,6 +5,19 @@ body {
   color: #333;
 }
 
+input{
+  padding: 5px;
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
+
+.form{
+  padding: 5px;
+  border-radius: 5px;
+  border-width: 1px;
+  border-style: dotted;
+}
+
 h1 {
   color: #444;
   font-size: 24px;
@@ -28,8 +41,18 @@ ul#item-list li {
   border: #333;
   border-width: 2px;
   border-style: solid;
-  padding: 5px;
-  margin: 5px;
+  padding: 10px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+
+}
+
+.actualItem{
+  background-color: gray;
+  border-width: 2px;
+  border-style: solid;
+  padding: 10px;
+  margin-bottom: 5px;
   border-radius: 5px;
 
 }
@@ -37,8 +60,8 @@ ul#item-list li {
 .btn{
   background-color: blue;
   color: white;
-  padding: 5px;
-  margin: 5px;
+  padding: 10px;
+  margin-bottom: 5px;
   border-radius: 5px;
   cursor: pointer;
 }
