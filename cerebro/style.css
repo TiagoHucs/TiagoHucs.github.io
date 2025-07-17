@@ -44,17 +44,14 @@ ul#item-list li {
   padding: 10px;
   margin-bottom: 5px;
   border-radius: 5px;
-
 }
 
-.actualItem{
-  background-color: gray;
-  border-width: 2px;
-  border-style: solid;
-  padding: 10px;
-  margin-bottom: 5px;
-  border-radius: 5px;
+.list-item{
+  background-color: rgb(88, 206, 253);
+}
 
+.actual-item{
+  background-color: rgb(140, 221, 124);
 }
 
 .btn{

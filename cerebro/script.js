@@ -1,87 +1,136 @@
 let itens = [];
-let itemAtual;
+let itemAtual = null;
 
 const itemList = document.getElementById('item-list');
-const actualItensElement = document.getElementById('actual-item');
-const btnShowForm = document.getElementById("btn-show-form");
-const itemForm = document.getElementById("item-form");
+const actualItemElement = document.getElementById('actual-item');
+const btnShowForm = document.getElementById('btn-show-form');
+const itemForm = document.getElementById('item-form');
 const tituloForm = document.getElementById('titulo-form');
 const descricaoForm = document.getElementById('descricao-form');
 
-getStorage();
-renderList();
+init();
+
+function init() {
+  loadFromStorage();
+  renderList();
+}
 
 function showForm() {
-  itemList.classList.add("hidden");
-  btnShowForm.classList.add("hidden");
-  itemForm.classList.remove("hidden");
-  
+  itemList.classList.add('d-none');
+  btnShowForm.classList.add('d-none');
+  itemForm.classList.remove('d-none');
 }
 
 function saveItem() {
+  const titulo = tituloForm.value.trim();
+  const descricao = descricaoForm.value.trim();
 
-  const tituloStr = tituloForm.value;
-  const descricaoStr = descricaoForm.value;
+  if (!titulo) return;
 
-  console.log('titulo:', tituloStr);
-  console.log('descricao:', descricaoStr);
-
-  const newItem = { id: crypto.randomUUID(), titulo: tituloStr, descricao: descricaoStr };
+  const newItem = {
+    id: crypto.randomUUID(),
+    titulo,
+    descricao
+  };
 
   itens.push(newItem);
-  saveStorage();
-
+  saveToStorage();
   renderList();
-
-  tituloForm.value = null;
-  descricaoForm.value = null;
-
-  itemForm.classList.add("hidden");
-  btnShowForm.classList.remove("hidden");
+  clearForm();
+  hideForm();
 }
 
 function renderList() {
   itemList.innerHTML = '';
-  getStorage();
+
   itens.forEach(item => {
-    const div = document.createElement('div');
-    div.textContent = item.titulo;
-    div.classList.add("item");
-    div.onclick = () => {
-     setActualItem(item.id);
-    };
-    itemList.appendChild(div);
+    const itemContainer = document.createElement('div');
+    itemContainer.classList.add('border', 'rounded', 'p-3', 'mb-3', 'cursor-pointer' , 'item', 'list-item');
+    itemContainer.style.cursor = 'pointer';
+
+    const idDiv = document.createElement('div');
+    idDiv.textContent = `ID: ${item.id}`;
+    idDiv.classList.add('text-muted', 'small');
+
+    const tituloDiv = document.createElement('div');
+    tituloDiv.textContent = item.titulo;
+    tituloDiv.classList.add('fw-bold', 'fs-5');
+
+    const descricaoDiv = document.createElement('div');
+    descricaoDiv.textContent = item.descricao;
+    descricaoDiv.classList.add('text-secondary');
+
+    itemContainer.appendChild(idDiv);
+    itemContainer.appendChild(tituloDiv);
+    itemContainer.appendChild(descricaoDiv);
+
+    itemContainer.onclick = () => setCurrentItem(item.id);
+
+    itemList.appendChild(itemContainer);
   });
-  itemList.classList.remove("hidden");
+
+  itemList.classList.remove('d-none');
 }
 
-function setActualItem(chosedId){
-   itemAtual = itens.find(i => i.id === chosedId);
-   renderActualIten(itemAtual);
+
+function setCurrentItem(id) {
+  itemAtual = itens.find(item => item.id === id);
+  renderCurrentItem();
 }
 
-function renderActualIten(item){
-    const div = document.createElement('div');
-    div.textContent = item.titulo;
-    div.classList.add("actualItem");
-    console.log('renderiou')
-    actualItensElement = div;
+function renderCurrentItem() {
+  if (!itemAtual) return;
+
+  actualItemElement.innerHTML = ''; // limpa conteúdo anterior
+  
+const itemContainer = document.createElement('div');
+    itemContainer.classList.add('border', 'rounded', 'p-3', 'mb-3', 'cursor-pointer' , 'item', 'actual-item');
+    itemContainer.style.cursor = 'pointer';
+
+    const idDiv = document.createElement('div');
+    idDiv.textContent = `ID: ${itemAtual.id}`;
+    idDiv.classList.add('text-muted', 'small');
+
+    const tituloDiv = document.createElement('div');
+    tituloDiv.textContent = itemAtual.titulo;
+    tituloDiv.classList.add('fw-bold', 'fs-5');
+
+    const descricaoDiv = document.createElement('div');
+    descricaoDiv.textContent = itemAtual.descricao;
+    descricaoDiv.classList.add('text-secondary');
+
+    itemContainer.appendChild(idDiv);
+    itemContainer.appendChild(tituloDiv);
+    itemContainer.appendChild(descricaoDiv);
+
+  actualItemElement.appendChild(itemContainer);
 }
 
-function saveStorage() {
-    localStorage.setItem("brainMyItens", JSON.stringify(itens));
+function cancelForm() {
+  clearForm();
+  hideForm();
+  renderList();
 }
 
-function getStorage() {
-    const objects = localStorage.getItem("brainMyItens");
-    if(objects){
-      const savedItens = JSON.parse(objects);
-      itens = savedItens;
-    }
+function clearForm() {
+  tituloForm.value = '';
+  descricaoForm.value = '';
+}
+
+function hideForm() {
+  itemForm.classList.add('d-none');
+  btnShowForm.classList.remove('d-none');
+}
+
+function saveToStorage() {
+  localStorage.setItem('brainMyItens', JSON.stringify(itens));
+}
+
+function loadFromStorage() {
+  const stored = localStorage.getItem('brainMyItens');
+  itens = stored ? JSON.parse(stored) : [];
 }
 
 function clearStorage() {
-    localStorage.removeItem("brainMyItens");
+  localStorage.removeItem('brainMyItens');
 }
-
-
