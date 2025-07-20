@@ -115,7 +115,7 @@ function updateGameArea() {
         snake.feed();
     }
     
-	document.getElementById('score').innerHTML = snake.length;
+	document.getElementById('score').innerHTML = snake.squares.length -1;
     checkGameOver();
 	
 }
