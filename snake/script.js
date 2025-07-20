@@ -137,7 +137,7 @@ function checkGameOver(){
     let sx = snake.squares[0].x;
     let sy = snake.squares[0].y;    
     if(sx < 0 || sy < 0 || sx >= GAME_AREA[0] || sy >= GAME_AREA[1]){
-        alert('GAME OVER');
+        alert("GAME OVER");
         restartPosicoes();
     }
 }
