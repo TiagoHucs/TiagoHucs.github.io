@@ -1,7 +1,5 @@
 var snake;
-var t = 0;
-var colidiu = false;
-var comida;
+var snack;
 
 var KEY_UP = 38;
 var KEY_DOWN = 40;
@@ -9,12 +7,84 @@ var KEY_LEFT = 37;
 var KEY_RIGHT = 39;
 var KEY_SPACE = 32;
 
-var speedX = 0;
-var speedY = 0;
-
 var GAME_AREA = [480,280];
 
 var TAM = 10;
+
+class Square {
+
+    constructor(width, height, color, x, y){
+        this.width = width;
+        this.height = height;
+        this.color = color;
+        this.x = x;
+        this.y = y;
+    }
+
+	paint = function () {
+        console.log('square: ' + this.color + ' paint');
+		myGameArea.context.fillStyle = this.color;
+		myGameArea.context.fillRect(this.x, this.y, this.width, this.height);
+	}
+}
+
+class Snake {
+    
+    constructor(width, height, color, x, y){
+        this.squares = [new Square(width, height, color, x, y)];
+        this.width = width;
+        this.height = height;
+        this.color = color;
+        this.speedX = 0;
+        this.speedY = 0;
+        this.growing = false;
+    }
+
+    setSpeed = function(x, y){
+        this.speedX = x;
+        this.speedY = y;
+    }
+
+    feed = function(){
+        this.growing = true;
+    }
+
+    move = function () {
+        console.log('Snake move')
+        let lastX;
+        let lastY;
+        let actualX;
+        let actualY;
+        this.squares.forEach(square => {
+            if(!lastX){
+                lastX = square.x;
+                lastY = square.y;
+                square.x += this.speedX;
+                square.y += this.speedY;
+            } else {
+                actualX = square.x;
+                actualY = square.y;
+                square.x = lastX;
+                square.y = lastY;
+                lastX = actualX;
+                lastY = actualY;
+            }
+            
+        });
+        if(this.growing){
+            this.squares.push(new Square(TAM,TAM,'white',lastX,lastY));
+            this.growing = false;
+        }
+        console.log('tamanho: ' + this.squares.length);
+	}
+
+	paint = function () {
+        console.log('Snake paint')
+        this.squares.forEach(square => {
+            square.paint();
+        });
+	}
+}
 
 function startGame() {
 	restartPosicoes();
@@ -22,13 +92,8 @@ function startGame() {
 }
 
 function restartPosicoes(){
-	snake = [];
-	t = 0;
-	speedX = 0;
-	speedY = 0;
-	colidiu = false;
-	snake.push(new Square(TAM, TAM, "white", 60, 20));
-	criaComida();
+	snake = new Snake(TAM, TAM, "white", 60, 20);
+	createSnack();
 }
 
 var myGameArea = {
@@ -37,87 +102,23 @@ var myGameArea = {
 		canvas.width = GAME_AREA[0];
 		canvas.height = GAME_AREA[1];
 		this.context = canvas.getContext("2d");
-		this.interval = setInterval(updateGameArea, 100);
+		this.interval = setInterval(updateGameArea, 75);
 	},
 	clear: function () {
 		this.context.clearRect(0, 0, canvas.width, canvas.height);
 	}
 }
 
-class Square {
-
-    constructor(width, height, color, x, y){
-	this.id = ++t;
-	this.width = width;
-	this.height = height;
-	this.color = color;
-	this.x = x;
-	this.y = y;
-    }
-	
-    move = function () {
-		this.x += speedX;
-		this.y += speedY;
-	}
-
-	paint = function () {
-		myGameArea.context.fillStyle = this.color;
-		myGameArea.context.fillRect(this.x, this.y, this.width, this.height);
-	}
-}
-
-function cresce() {
-	x = snake[snake.length - 1].x;
-	y = snake[snake.length - 1].y;
-	snake.push(new Square(TAM, TAM, "white", x, y));
-}
-
-function saoVizinhos(a,b) {
-	return a - b == 1 || b - a == 1;
-}
-
 function updateGameArea() {
-
 	myGameArea.clear();
-
-	// cauda herda posição anterior do quadrado da frente
-	for (var i = snake.length; i > 0; i--) {
-		if (snake[i] && snake[i - 1]) {
-			snake[i].x = snake[i - 1].x;
-			snake[i].y = snake[i - 1].y;
-		}
-	}
-
-	snake.forEach(pinta);
-	function pinta(item, index) {
-		item.paint();
-	}
-
-	comida.paint();
-
-	// checa colisoes entre os quadrados da snake (menos vizinhos)
-	for (var i = 0; i < snake.length; i++) {
-		for (var j = 0; j < snake.length; j++) {
-			if (j !== i && !saoVizinhos(i,j)) {
-				colidiu = checkColision(snake[i], snake[j]);
-			}
-		}
-	}
-
-	// checa colisoes entre a cabeça pra crescer
-	if(checkColision(snake[0], comida)){
-		cresce();
-		criaComida();
-	}
-
- 	if(colidiu){
-		alert('Game over!');
-		restartPosicoes();
-	} else {
-		snake[0].move();
-		snake[0].paint();
-	}
-
+    snake.move();
+	snake.paint();
+    snack.paint();
+    if(checkColision(snake.squares[0],snack)){
+        createSnack();
+        snake.feed();
+    }
+    
 	document.getElementById('score').innerHTML = snake.length;
 	
 }
@@ -129,10 +130,10 @@ function checkColision(pedraA, pedraB) {
 	return false;
 }
 
-function criaComida() {
+function createSnack() {
 	var x = getRndInteger(0,GAME_AREA[0]-TAM);
 	var y = getRndInteger(0,GAME_AREA[1]-TAM);
-	comida = new Square(TAM,TAM,"red",x,y);
+	snack = new Square(TAM,TAM,"red",x,y);
 }
 
 function getRndInteger(min, max) {
@@ -142,34 +143,15 @@ function getRndInteger(min, max) {
 window.addEventListener('keydown', this.controla, false);
 
 function controla(e) {
-
 	if (e.keyCode == KEY_UP) {
-
-		zeraVelocidade();
-		speedY = -TAM;
-
+		snake.setSpeed(0,-TAM);
 	} else if (e.keyCode == KEY_DOWN) {
-
-		zeraVelocidade();
-		speedY = TAM;
-
+        snake.setSpeed(0,TAM);
 	} else if (e.keyCode == KEY_LEFT) {
-
-		zeraVelocidade();
-		speedX = -TAM;
-
+		snake.setSpeed(-TAM, 0);
 	} else if (e.keyCode == KEY_RIGHT) {
-
-		zeraVelocidade();
-		speedX = TAM;
-		
+        snake.setSpeed(TAM, 0);
 	} else if (e.keyCode == KEY_SPACE){
-		cresce();
+		snake.feed();
 	}
-
-}
-
-function zeraVelocidade(){
-	speedX = 0;
-	speedY = 0;
 }
