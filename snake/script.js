@@ -22,7 +22,6 @@ class Square {
     }
 
 	paint = function () {
-        console.log('square: ' + this.color + ' paint');
 		myGameArea.context.fillStyle = this.color;
 		myGameArea.context.fillRect(this.x, this.y, this.width, this.height);
 	}
@@ -50,7 +49,6 @@ class Snake {
     }
 
     move = function () {
-        console.log('Snake move')
         let lastX;
         let lastY;
         let actualX;
@@ -75,11 +73,9 @@ class Snake {
             this.squares.push(new Square(TAM,TAM,'white',lastX,lastY));
             this.growing = false;
         }
-        console.log('tamanho: ' + this.squares.length);
 	}
 
 	paint = function () {
-        console.log('Snake paint')
         this.squares.forEach(square => {
             square.paint();
         });
@@ -102,7 +98,7 @@ var myGameArea = {
 		canvas.width = GAME_AREA[0];
 		canvas.height = GAME_AREA[1];
 		this.context = canvas.getContext("2d");
-		this.interval = setInterval(updateGameArea, 75);
+		this.interval = setInterval(updateGameArea, 100);
 	},
 	clear: function () {
 		this.context.clearRect(0, 0, canvas.width, canvas.height);
@@ -120,6 +116,7 @@ function updateGameArea() {
     }
     
 	document.getElementById('score').innerHTML = snake.length;
+    checkGameOver();
 	
 }
 
@@ -134,6 +131,15 @@ function createSnack() {
 	var x = getRndInteger(0,GAME_AREA[0]-TAM);
 	var y = getRndInteger(0,GAME_AREA[1]-TAM);
 	snack = new Square(TAM,TAM,"red",x,y);
+}
+
+function checkGameOver(){
+    let sx = snake.squares[0].x;
+    let sy = snake.squares[0].y;    
+    if(sx < 0 || sy < 0 || sx >= GAME_AREA[0] || sy >= GAME_AREA[1]){
+        alert('GAME OVER');
+        restartPosicoes();
+    }
 }
 
 function getRndInteger(min, max) {
