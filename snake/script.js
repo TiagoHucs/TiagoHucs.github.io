@@ -27,7 +27,7 @@ function restartPosicoes(){
 	speedX = 0;
 	speedY = 0;
 	colidiu = false;
-	snake.push(new quadrado(TAM, TAM, "white", 60, 20));
+	snake.push(new Square(TAM, TAM, "white", 60, 20));
 	criaComida();
 }
 
@@ -44,20 +44,23 @@ var myGameArea = {
 	}
 }
 
-function quadrado(width, height, color, x, y) {
+class Square {
+
+    constructor(width, height, color, x, y){
 	this.id = ++t;
 	this.width = width;
 	this.height = height;
 	this.color = color;
 	this.x = x;
 	this.y = y;
-
-	this.move = function () {
+    }
+	
+    move = function () {
 		this.x += speedX;
 		this.y += speedY;
 	}
 
-	this.paint = function () {
+	paint = function () {
 		myGameArea.context.fillStyle = this.color;
 		myGameArea.context.fillRect(this.x, this.y, this.width, this.height);
 	}
@@ -66,7 +69,7 @@ function quadrado(width, height, color, x, y) {
 function cresce() {
 	x = snake[snake.length - 1].x;
 	y = snake[snake.length - 1].y;
-	snake.push(new quadrado(TAM, TAM, "white", x, y));
+	snake.push(new Square(TAM, TAM, "white", x, y));
 }
 
 function saoVizinhos(a,b) {
@@ -129,7 +132,7 @@ function checkColision(pedraA, pedraB) {
 function criaComida() {
 	var x = getRndInteger(0,GAME_AREA[0]-TAM);
 	var y = getRndInteger(0,GAME_AREA[1]-TAM);
-	comida = new quadrado(TAM,TAM,"red",x,y);
+	comida = new Square(TAM,TAM,"red",x,y);
 }
 
 function getRndInteger(min, max) {
