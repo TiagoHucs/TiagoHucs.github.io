@@ -1,0 +1,49 @@
+body {
+  background-color: #111;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  text-align: center;
+}
+
+#morseButton {
+  margin-top: 20px;
+  padding: 40px 80px;
+  font-size: 24px;
+  border: none;
+  border-radius: 10px;
+  background-color: #333;
+  color: #fff;
+  cursor: pointer;
+}
+
+#morseButton:active {
+  background-color: #555;
+}
+
+#clearButton {
+  padding: 10px 30px;
+  font-size: 18px;
+  border: none;
+  border-radius: 8px;
+  background-color: #aa0000;
+  color: #fff;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+#clearButton:hover {
+  background-color: #cc0000;
+}
+
+
+#output {
+  font-size: 28px;
+}
