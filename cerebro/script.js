@@ -27,10 +27,16 @@ function saveItem() {
 
   if (!titulo) return;
 
+  let parentId = undefined
+  if(itemAtual){
+    parentId = itemAtual.id
+  }
+
   const newItem = {
     id: crypto.randomUUID(),
-    titulo,
-    descricao
+    titulo: titulo,
+    descricao: descricao,
+    parentId: parentId
   };
 
   itens.push(newItem);
@@ -42,8 +48,16 @@ function saveItem() {
 
 function renderList() {
   itemList.innerHTML = '';
+  
+  let itensToRender;
+  if(itemAtual){
+    itensToRender = itens.filter(i => i.parentId === itemAtual.id);
+  } else {
+    itensToRender = itens.filter(i => i.parentId === undefined);
+  }
 
-  itens.forEach(item => {
+
+  itensToRender.forEach(item => {
     const itemContainer = document.createElement('div');
     itemContainer.classList.add('border', 'rounded', 'p-3', 'mb-3', 'cursor-pointer' , 'item', 'list-item');
     itemContainer.style.cursor = 'pointer';
@@ -72,16 +86,15 @@ function renderList() {
   itemList.classList.remove('d-none');
 }
 
-
 function setCurrentItem(id) {
   itemAtual = itens.find(item => item.id === id);
   renderCurrentItem();
+  renderList();
 }
 
 function renderCurrentItem() {
-  if (!itemAtual) return;
-
   actualItemElement.innerHTML = ''; // limpa conteúdo anterior
+  if (!itemAtual) return;
   
 const itemContainer = document.createElement('div');
     itemContainer.classList.add('border', 'rounded', 'p-3', 'mb-3', 'cursor-pointer' , 'item', 'actual-item');
@@ -102,6 +115,8 @@ const itemContainer = document.createElement('div');
     itemContainer.appendChild(idDiv);
     itemContainer.appendChild(tituloDiv);
     itemContainer.appendChild(descricaoDiv);
+
+    itemContainer.onclick = () => setCurrentItem(itemAtual.parentId);
 
   actualItemElement.appendChild(itemContainer);
 }
