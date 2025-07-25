@@ -1,113 +1,78 @@
-const morseCodeMap = {
-  ".-": "A", "-...": "B", "-.-.": "C", "-..": "D",
-  ".": "E", "..-.": "F", "--.": "G", "....": "H",
-  "..": "I", ".---": "J", "-.-": "K", ".-..": "L",
-  "--": "M", "-.": "N", "---": "O", ".--.": "P",
-  "--.-": "Q", ".-.": "R", "...": "S", "-": "T",
-  "..-": "U", "...-": "V", ".--": "W", "-..-": "X",
-  "-.--": "Y", "--..": "Z", "": " "
-};
+    const button = document.getElementById('morseButton');
+    const resultadoSpan = document.getElementById('resultado');
 
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    let startTime = 0;
+    let textoFinal = '';
+    let bufferLetra = '';
+    let ultimoSolto = 0;
+    let letraProcessada = true;
 
-function playBeep(duration = 150, frequency = 600, volume = 0.5) {
-  const oscillator = audioCtx.createOscillator();
-  const gainNode = audioCtx.createGain();
+    const duracaoLimite = 250;
+    const intervaloEntreLetras = 800;
 
-  oscillator.type = "sine"; // você pode usar "square" também
-  oscillator.frequency.value = frequency;
+    const morseToChar = {
+      '.-': 'A', '-...': 'B', '-.-.': 'C', '-..': 'D',
+      '.': 'E', '..-.': 'F', '--.': 'G', '....': 'H',
+      '..': 'I', '.---': 'J', '-.-': 'K', '.-..': 'L',
+      '--': 'M', '-.': 'N', '---': 'O', '.--.': 'P',
+      '--.-': 'Q', '.-.': 'R', '...': 'S', '-': 'T',
+      '..-': 'U', '...-': 'V', '.--': 'W', '-..-': 'X',
+      '-.--': 'Y', '--..': 'Z',
+      '-----': '0', '.----': '1', '..---': '2', '...--': '3',
+      '....-': '4', '.....': '5', '-....': '6', '--...': '7',
+      '---..': '8', '----.': '9'
+    };
 
-  gainNode.gain.value = volume;
-
-  oscillator.connect(gainNode);
-  gainNode.connect(audioCtx.destination);
-
-  oscillator.start();
-  setTimeout(() => {
-    oscillator.stop();
-  }, duration);
-}
-
-let currentSymbol = "";
-let output = "";
-let pressStartTime = 0;
-let timeout;
-
-const button = document.getElementById("morseButton");
-const outputDiv = document.getElementById("output");
-
-button.addEventListener("mousedown", () => {
-  pressStartTime = new Date().getTime();
-  clearTimeout(timeout);
-});
-
-button.addEventListener("mouseup", () => {
-  const duration = new Date().getTime() - pressStartTime;
-
-  if (duration < 300) {
-    currentSymbol += ".";
-    playBeep(150, 700); // ponto
-  } else {
-    currentSymbol += "-";
-    playBeep(400, 700); // traço
-  }
-
-
-  // Aguarda 1 segundo de inatividade para decodificar a letra
-  timeout = setTimeout(() => {
-    const letter = morseCodeMap[currentSymbol] || "?";
-    output += letter;
-    currentSymbol = "";
-    outputDiv.textContent = "Texto: " + output;
-  }, 1000);
-});
-
-// ... (código anterior permanece igual)
-
-const clearButton = document.getElementById("clearButton");
-
-clearButton.addEventListener("click", () => {
-  currentSymbol = "";
-  output = "";
-  outputDiv.textContent = "Texto: ";
-  clearTimeout(timeout);
-});
-
-
-//tocar uma sequencia
-function playMorseSequence(sequence, onEnd) {
-  let index = 0;
-
-  function playNext() {
-    if (index >= sequence.length) {
-      if (onEnd) onEnd();
-      return;
+    function registrarSinal(duracaoPressionado) {
+      const simbolo = duracaoPressionado < duracaoLimite ? '.' : '-';
+      bufferLetra += simbolo;
+      atualizarVisual();
+      letraProcessada = false;
     }
 
-    const symbol = sequence[index++];
-    if (symbol === ".") {
-      playBeep(150, 700);
-      setTimeout(playNext, 200); // pausa curta
-    } else if (symbol === "-") {
-      playBeep(400, 700);
-      setTimeout(playNext, 450); // pausa longa
-    } else {
-      setTimeout(playNext, 200);
+    function processarLetra(buffer) {
+      if (buffer.length === 0) return;
+      const letra = morseToChar[buffer] || '?';
+      textoFinal += letra;
+      console.log(`Letra detectada: ${letra} (morse: ${buffer})`);
+      atualizarVisualLimpo();
+      bufferLetra = '';
     }
-  }
 
-  playNext();
-}
+    function atualizarVisual() {
+      resultadoSpan.textContent = textoFinal + bufferLetra;
+    }
 
-// ▶️ Toca "A" (.-) automaticamente ao carregar
-window.addEventListener("load", () => {
-  const initialLetter = "A";
-  const morse = Object.entries(morseCodeMap).find(([code, letter]) => letter === initialLetter);
-  
-  if (morse) {
-    currentSymbol = "";
-    output = initialLetter;
-    outputDiv.textContent = "Texto: " + output;
-    playMorseSequence(morse[0]);
-  }
-});
+    function atualizarVisualLimpo() {
+      resultadoSpan.textContent = textoFinal;
+    }
+
+    function iniciarPressao() {
+      startTime = performance.now();
+    }
+
+    function finalizarPressao() {
+      const duracao = performance.now() - startTime;
+      registrarSinal(duracao);
+      ultimoSolto = performance.now();
+    }
+
+    setInterval(() => {
+      const agora = performance.now();
+      const tempoDesdeUltimo = agora - ultimoSolto;
+      console.log('loop')
+      if (!letraProcessada && bufferLetra.length > 0 && tempoDesdeUltimo > intervaloEntreLetras) {
+        processarLetra(bufferLetra);
+        letraProcessada = true;
+      }
+    }, 100);
+
+    button.addEventListener('mousedown', iniciarPressao);
+    button.addEventListener('mouseup', finalizarPressao);
+
+    button.addEventListener('touchstart', e => {
+      e.preventDefault();
+      iniciarPressao();
+    }, { passive: false });
+
+    button.addEventListener('touchend', finalizarPressao);
