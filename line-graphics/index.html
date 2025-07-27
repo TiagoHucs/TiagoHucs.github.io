@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Gráfico de Linhas</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    #grafico-container {
+      width: 600px;
+      height: 400px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="grafico-container">
+  <canvas id="meuGrafico"></canvas>
+</div>
+
+<script>
+  const ctx = document.getElementById('meuGrafico').getContext('2d');
+
+  const meuGrafico = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+      datasets: [
+        {
+          label: 'A',
+          data: [null, null, 15, 30, 25, 40],
+          borderColor: 'red',
+          fill: false
+        },
+        {
+          label: 'B',
+          data: [5, 15, 10, 20, 18, 30],
+          borderColor: 'blue',
+          fill: false
+        },
+        {
+          label: 'C',
+          data: [12, 18, 14, 22, 20, 28],
+          borderColor: 'green',
+          fill: false
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'top'
+        },
+        title: {
+          display: true,
+          text: 'Gráfico de A, B e C por mês'
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+</script>
+
+</body>
+</html>
