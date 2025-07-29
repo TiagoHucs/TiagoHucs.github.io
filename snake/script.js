@@ -10,6 +10,8 @@ var KEY_SPACE = 32;
 var GAME_AREA = [480,280];
 
 var TAM = 10;
+var TICK = 50;
+
 
 class Square {
 
@@ -98,7 +100,7 @@ var myGameArea = {
 		canvas.width = GAME_AREA[0];
 		canvas.height = GAME_AREA[1];
 		this.context = canvas.getContext("2d");
-		this.interval = setInterval(updateGameArea, 100);
+		this.interval = setInterval(updateGameArea, TICK);
 	},
 	clear: function () {
 		this.context.clearRect(0, 0, canvas.width, canvas.height);
