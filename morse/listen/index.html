@@ -1,160 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Treino Morse Completo</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background: #111;
-      color: #fff;
-      font-family: sans-serif;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    #feedback {
-      font-size: 2em;
-      margin-top: 50px;
-      text-align: center;
-    }
-
-    #botoes-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 50px;
-      max-width: 90%;
-    }
-
-    #iniciar {
-      margin-top: 20px;
-      padding: 15px 30px;
-      font-size: 1.5em;
-      background-color: #28a745;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    #iniciar:hover {
-      background-color: #218838;
-    }
-
-    button {
-      padding: 10px 20px;
-      font-size: 1.2em;
-      border: none;
-      border-radius: 10px;
-      background-color: #333;
-      color: white;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-
-    button:hover {
-      background-color: #555;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Treino Morse</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
   <div id="feedback">Clique em "Iniciar Jogo" para começar.</div>
   <button id="iniciar">Iniciar Jogo</button>
-
   <div id="botoes-container" style="display: none;"></div>
 
-  <script>
-    const morseMap = {
-      '.-': 'A', '-...': 'B', '-.-.': 'C', '-..': 'D',
-      '.': 'E', '..-.': 'F', '--.': 'G', '....': 'H',
-      '..': 'I', '.---': 'J', '-.-': 'K', '.-..': 'L',
-      '--': 'M', '-.': 'N', '---': 'O', '.--.': 'P',
-      '--.-': 'Q', '.-.': 'R', '...': 'S', '-': 'T',
-      '..-': 'U', '...-': 'V', '.--': 'W', '-..-': 'X',
-      '-.--': 'Y', '--..': 'Z',
-      '-----': '0', '.----': '1', '..---': '2', '...--': '3',
-      '....-': '4', '.....': '5', '-....': '6', '--...': '7',
-      '---..': '8', '----.': '9'
-    };
-
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    let tempoPonto = 150;
-    let tempoTraco = 3 * tempoPonto;
-    let letraAtual = '';
-    let morseAtual = '';
-
-    const letraParaMorse = {};
-    for (const [morse, letra] of Object.entries(morseMap)) {
-      letraParaMorse[letra] = morse;
-    }
-
-    async function tocarLetra(morse) {
-      for (const simbolo of morse) {
-        const duracao = simbolo === '.' ? tempoPonto : tempoTraco;
-
-        const oscillator = audioContext.createOscillator();
-        oscillator.type = 'sine';
-        oscillator.frequency.setValueAtTime(700, audioContext.currentTime);
-
-        const gainNode = audioContext.createGain();
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-
-        oscillator.start();
-        setTimeout(() => oscillator.stop(), duracao);
-
-        await new Promise(resolve => setTimeout(resolve, duracao + tempoPonto));
-      }
-    }
-
-    function escolherLetraAleatoria() {
-      const letras = Object.values(morseMap);
-      const aleatoria = letras[Math.floor(Math.random() * letras.length)];
-      return aleatoria;
-    }
-
-    async function novaRodada() {
-      document.getElementById('feedback').textContent = '...';
-      letraAtual = escolherLetraAleatoria();
-      morseAtual = letraParaMorse[letraAtual];
-      await tocarLetra(morseAtual);
-    }
-
-    function verificarResposta(resposta) {
-      const feedback = document.getElementById('feedback');
-      if (resposta === letraAtual) {
-        feedback.textContent = '✅ Correto! Era "' + letraAtual + '"';
-      } else {
-        feedback.textContent = '❌ Errado! Era "' + letraAtual + '"';
-      }
-      setTimeout(novaRodada, 1500);
-    }
-
-    function criarBotoes() {
-      const container = document.getElementById('botoes-container');
-      const caracteres = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'];
-      caracteres.forEach(char => {
-        const btn = document.createElement('button');
-        btn.textContent = char;
-        btn.onclick = () => verificarResposta(char);
-        container.appendChild(btn);
-      });
-    }
-
-    document.getElementById('iniciar').addEventListener('click', async () => {
-      await audioContext.resume(); // necessário para ativar o áudio no primeiro clique
-      document.getElementById('iniciar').style.display = 'none';
-      document.getElementById('botoes-container').style.display = 'flex';
-      criarBotoes();
-      setTimeout(novaRodada, 500); // aguarda um pouco para garantir que o som será tocado
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
