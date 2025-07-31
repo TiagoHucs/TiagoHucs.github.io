@@ -59,6 +59,24 @@ body {
   transition: background-color 0.3s;
 }
 
+.btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;     /* Alinha horizontalmente */
+    justify-content: center; /* Alinha verticalmente */
+    text-align: center;      /* Garante alinhamento do texto */
+    padding: 10px;
+    margin: 2px;
+    border-radius: 6px;
+    background-color: gray;
+    color: white;
+    cursor: pointer;
+}
+
+.btn div {
+    width: 100%;
+}
+
 #botoes-container button:hover {
   background-color: #555;
 }

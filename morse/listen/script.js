@@ -4,41 +4,50 @@ const morseMap = [
 
     { codigo: '.-', letra: 'A', level: 2 },
     { codigo: '-.', letra: 'N', level: 2 },
-    { codigo: '..', letra: 'I', level: 2 },
-    { codigo: '--', letra: 'M', level: 2 },
 
-    { codigo: '-..', letra: 'D', level: 3 },
-    { codigo: '--.', letra: 'G', level: 3 },
-    { codigo: '-.-', letra: 'K', level: 3 },
-    { codigo: '---', letra: 'O', level: 3 },
-    { codigo: '.-.', letra: 'R', level: 3 },
-    { codigo: '...', letra: 'S', level: 3 },
-    { codigo: '..-', letra: 'U', level: 3 },
-    { codigo: '.--', letra: 'W', level: 3 },
+    { codigo: '..', letra: 'I', level: 3 },
+    { codigo: '--', letra: 'M', level: 3 },
 
-    { codigo: '-...', letra: 'B', level: 4 },
-    { codigo: '-.-.', letra: 'C', level: 4 },
-    { codigo: '..-.', letra: 'F', level: 4 },
-    { codigo: '....', letra: 'H', level: 4 },
-    { codigo: '.---', letra: 'J', level: 4 },
-    { codigo: '.-..', letra: 'L', level: 4 },
-    { codigo: '.--.', letra: 'P', level: 4 },
-    { codigo: '--.-', letra: 'Q', level: 4 },
-    { codigo: '...-', letra: 'V', level: 4 },
-    { codigo: '-..-', letra: 'X', level: 4 },
-    { codigo: '-.--', letra: 'Y', level: 4 },
-    { codigo: '--..', letra: 'Z', level: 4 },
+    { codigo: '...', letra: 'S', level: 4 },
+    { codigo: '---', letra: 'O', level: 4 },
 
-    { codigo: '-----', letra: '0', level: 5 },
-    { codigo: '.----', letra: '1', level: 5 },
-    { codigo: '..---', letra: '2', level: 5 },
-    { codigo: '...--', letra: '3', level: 5 },
-    { codigo: '....-', letra: '4', level: 5 },
-    { codigo: '.....', letra: '5', level: 5 },
-    { codigo: '-....', letra: '6', level: 5 },
-    { codigo: '--...', letra: '7', level: 5 },
-    { codigo: '---..', letra: '8', level: 5 },
-    { codigo: '----.', letra: '9', level: 5 }
+    { codigo: '-..', letra: 'D', level: 5 },
+    { codigo: '..-', letra: 'U', level: 5 },
+
+    { codigo: '.-.', letra: 'R', level: 6 },
+    { codigo: '-.-', letra: 'K', level: 6 },
+
+    { codigo: '-.-.', letra: 'C', level: 7 },
+    { codigo: '.--.', letra: 'P', level: 7 },
+
+    { codigo: '-...', letra: 'B', level: 8 },
+    { codigo: '--.', letra: 'G', level: 8 },
+
+    { codigo: '.--', letra: 'W', level: 9 },
+    { codigo: '.-..', letra: 'L', level: 9 },
+
+    { codigo: '--.-', letra: 'Q', level: 10 },
+    { codigo: '....', letra: 'H', level: 10 },
+    
+    { codigo: '..-.', letra: 'F', level: 11 },
+    { codigo: '-.--', letra: 'Y', level: 11 },
+    
+    { codigo: '--..', letra: 'Z', level: 12 },
+    { codigo: '...-', letra: 'V', level: 12 },
+    
+    { codigo: '.---', letra: 'J', level: 13 },
+    { codigo: '-..-', letra: 'X', level: 13 },
+
+    { codigo: '-----', letra: '0', level: 14 },
+    { codigo: '.----', letra: '1', level: 14 },
+    { codigo: '..---', letra: '2', level: 14 },
+    { codigo: '...--', letra: '3', level: 14 },
+    { codigo: '....-', letra: '4', level: 14 },
+    { codigo: '.....', letra: '5', level: 14 },
+    { codigo: '-....', letra: '6', level: 14 },
+    { codigo: '--...', letra: '7', level: 14 },
+    { codigo: '---..', letra: '8', level: 14 },
+    { codigo: '----.', letra: '9', level: 14 }
 ];
 
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -88,7 +97,7 @@ function verificarResposta(resposta) {
     if (resposta === letraAtual.letra) {
         feedback.innerHTML = '✅ Correto! Era "' + letraAtual.letra + '" <br> ' + letraAtual.codigo;
         levelAcertos++;
-        if(levelAcertos === 10){
+        if(levelAcertos === 3){
             levelAcertos = 0;
             levelAtual++;
         }
@@ -109,10 +118,19 @@ function criarBotoes() {
 
     const itemLevelList = getLevelMap();
     itemLevelList.forEach(item => {
-        const btn = document.createElement('button');
-        btn.textContent = item.letra;
-        btn.onclick = () => verificarResposta(item.letra);
-        container.appendChild(btn);
+        const divBtn = document.createElement('div');
+        divBtn.className = 'btn';
+        divBtn.onclick = () => verificarResposta(item.letra);
+
+        const divLetra = document.createElement('div');
+        divLetra.textContent = item.letra;
+
+        const divCodigo = document.createElement('div');
+        divCodigo.textContent = item.codigo;
+
+        divBtn.appendChild(divLetra);
+        divBtn.appendChild(divCodigo);
+        container.appendChild(divBtn);
     });
 }
 
