@@ -28,13 +28,13 @@ const morseMap = [
 
     { codigo: '--.-', letra: 'Q', level: 10 },
     { codigo: '....', letra: 'H', level: 10 },
-    
+
     { codigo: '..-.', letra: 'F', level: 11 },
     { codigo: '-.--', letra: 'Y', level: 11 },
-    
+
     { codigo: '--..', letra: 'Z', level: 12 },
     { codigo: '...-', letra: 'V', level: 12 },
-    
+
     { codigo: '.---', letra: 'J', level: 13 },
     { codigo: '-..-', letra: 'X', level: 13 },
 
@@ -97,7 +97,7 @@ function verificarResposta(resposta) {
     if (resposta === letraAtual.letra) {
         feedback.innerHTML = '✅ Correto! Era "' + letraAtual.letra + '" <br> ' + letraAtual.codigo;
         levelAcertos++;
-        if(levelAcertos === 3){
+        if (levelAcertos === 3) {
             levelAcertos = 0;
             levelAtual++;
         }
@@ -108,8 +108,8 @@ function verificarResposta(resposta) {
     setTimeout(novaRodada, 1500);
 }
 
-function getLevelMap(){
-    return morseMap.filter(m => m.level <= levelAtual); 
+function getLevelMap() {
+    return morseMap.filter(m => m.level <= levelAtual);
 }
 
 function criarBotoes() {
