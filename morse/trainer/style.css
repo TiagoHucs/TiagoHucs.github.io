@@ -1,0 +1,99 @@
+/* Reset básico e fonte */
+body {
+  margin: 0;
+  padding: 0;
+  background: #111;
+  color: #fff;
+  font-family: sans-serif;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Feedback grande e visível */
+#feedback {
+  font-size: 2em;
+  margin-top: 40px;
+  text-align: center;
+  padding: 0 10px;
+}
+
+/* Botão iniciar */
+#iniciar {
+  margin-top: 20px;
+  padding: 15px 30px;
+  font-size: 1.5em;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#iniciar:hover {
+  background-color: #218838;
+}
+
+/* Container dos botões */
+#botoes-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px;
+  padding-bottom: 20px;
+  max-width: 100%;
+}
+
+/* Botões das letras */
+#botoes-container button {
+  padding: 12px 18px;
+  font-size: 1.4em;
+  border: none;
+  border-radius: 10px;
+  background-color: #333;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;     /* Alinha horizontalmente */
+    justify-content: center; /* Alinha verticalmente */
+    text-align: center;      /* Garante alinhamento do texto */
+    padding: 10px;
+    margin: 2px;
+    border-radius: 6px;
+    background-color: gray;
+    color: white;
+    cursor: pointer;
+}
+
+.btn div {
+    width: 100%;
+}
+
+#botoes-container button:hover {
+  background-color: #555;
+}
+
+/* RESPONSIVO para telas menores */
+@media (max-width: 600px) {
+  #feedback {
+    font-size: 1.5em;
+  }
+
+  #iniciar {
+    font-size: 1.2em;
+    padding: 12px 20px;
+  }
+
+  #botoes-container button {
+    font-size: 1.1em;
+    padding: 10px 12px;
+  }
+}
